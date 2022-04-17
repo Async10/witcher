@@ -1,13 +1,26 @@
+import { createTheme } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/system";
 import React from "react";
 import ReactDOM from "react-dom";
-import CssBaseline from "@mui/material/CssBaseline";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { StoreProvider } from "./services/store";
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline />
-    <App />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <StoreProvider>
+        <App />
+      </StoreProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
