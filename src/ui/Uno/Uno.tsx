@@ -18,27 +18,40 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAenderePunkte, useBeendeSpiel, useGeheZuNaechsterRunde, useGeheZuVorherigerRunde } from "../../application/uno";
+import {
+  useAenderePunkte,
+  useBeendeSpiel,
+  useGeheZuNaechsterRunde,
+  useGeheZuVorherigerRunde,
+} from "../../application/uno";
 import { useAktualisiereSpielstand } from "../../application/uno/aktualisiereSpielstand";
-import { Auswertung, Rundennummer, Spieler } from "../../domain/shared";
+import { Rundennummer } from "../../domain/rundennummer";
+import { Spieler } from "../../domain/spielerliste";
 import { Spieleverwaltung } from "../../domain/spieleverwaltung";
+import { Auswertung } from "../../domain/spielstand";
 import * as uno from "../../domain/uno";
 import { useSpieleverwaltungStorage } from "../../services/adapters";
 
-function selectSpiel(spieleverwaltung: Spieleverwaltung, id: UniqueId): uno.Uno {
+function selectSpiel(
+  spieleverwaltung: Spieleverwaltung,
+  id: UniqueId
+): uno.Uno {
   return spieleverwaltung.uno[id];
 }
 
-function selectAktuelleRunde(spiel: uno.Uno, rundennummer: Rundennummer): uno.Runde {
+function selectAktuelleRunde(
+  spiel: uno.Uno,
+  rundennummer: Rundennummer
+): uno.Runde {
   return spiel.runden[rundennummer];
 }
 
 function selectAuswertung(spiel: uno.Uno, spieler: Spieler): Auswertung {
-  return spiel.spielstand.find(s => s.spieler === spieler)!;
+  return spiel.spielstand.find((s) => s.spieler === spieler)!;
 }
 
-export default function UnoPage() {
-  const params = useParams<{ id: string; }>();
+export default function Uno() {
+  const params = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
@@ -79,21 +92,29 @@ export default function UnoPage() {
     setDialogOpen(false);
   };
 
-  const handlePunkteChange = (spieler: Spieler) => (ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const value = ev.target.value;
-    const punkte = value === "" ? 0 : parseInt(value, 10);
-    if (isNaN(punkte)) {
-      throw new Error("Punkte müssen eine Ganzzahl größer oder gleich 0 sein");
-    }
+  const handlePunkteChange =
+    (spieler: Spieler) =>
+    (ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      const value = ev.target.value;
+      const punkte = value === "" ? 0 : parseInt(value, 10);
+      if (isNaN(punkte)) {
+        throw new Error(
+          "Punkte müssen eine Ganzzahl größer oder gleich 0 sein"
+        );
+      }
 
-    aenderePunkte(spiel, spieler, punkte);
-  };
+      aenderePunkte(spiel, spieler, punkte);
+    };
 
-  const handlePunkteBlur = (ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+  const handlePunkteBlur = (
+    ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>
+  ) => {
     aktualisiereSpielstand(spiel);
   };
 
-  const handlePunkteFocus = (ev: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement, Element>) => {
+  const handlePunkteFocus = (
+    ev: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement, Element>
+  ) => {
     ev.target.select();
   };
 
@@ -118,11 +139,11 @@ export default function UnoPage() {
     <>
       <Container sx={{ mb: 10 }} maxWidth="sm">
         <Box sx={{ my: 2 }}>
-          <Typography color="primary" variant="h4" component="h1" gutterBottom>
+          <Typography color="primary" variant="h5" component="h1" gutterBottom>
             {titel}
           </Typography>
 
-          <Typography variant="h5" component="h2" gutterBottom>
+          <Typography variant="h6" component="h2" gutterBottom>
             Runde {rundennummer}
           </Typography>
 
@@ -153,7 +174,7 @@ export default function UnoPage() {
         position="fixed"
         sx={{
           top: "auto",
-          bottom: 0
+          bottom: 0,
         }}
       >
         <Toolbar>
@@ -167,13 +188,15 @@ export default function UnoPage() {
             <IconButton onClick={handleZurueckClick} aria-labelledby="zurueck">
               <ArrowBackIosOutlined />
             </IconButton>
-            <Typography id="zurueck" variant="caption">Vorherige Runde</Typography>
+            <Typography id="zurueck" variant="caption">
+              Vorherige Runde
+            </Typography>
           </Box>
           <Fab
             color="primary"
             sx={{
               mx: "auto",
-              transform: "translateY(-50%)"
+              transform: "translateY(-50%)",
             }}
             aria-labelledby="siegerehrung"
             onClick={handleBeendeSpielClick}
@@ -201,14 +224,14 @@ export default function UnoPage() {
             <IconButton onClick={handleWeiterClick} aria-labelledby="weiter">
               <ArrowForwardIosOutlined />
             </IconButton>
-            <Typography id="weiter" variant="caption">Nächste Runde</Typography>
+            <Typography id="weiter" variant="caption">
+              Nächste Runde
+            </Typography>
           </Box>
         </Toolbar>
       </AppBar>
       <Dialog open={dialogOpen}>
-        <DialogTitle>
-          Spiel beenden?
-        </DialogTitle>
+        <DialogTitle>Spiel beenden?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Wollt ihr das Spiel beenden und die Siegerehrung durchführen?

@@ -9,3 +9,4 @@ type Result<T, E = string> =
   | { success: false, error: E; };
 
 type UniqueId = string;
+type Timestamp = number;

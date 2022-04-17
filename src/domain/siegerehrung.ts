@@ -1,4 +1,4 @@
-import { Spielstand } from "./shared";
+import { Spielstand } from "./spielstand";
 import { Uno } from "./uno";
 
 

@@ -1,4 +1,4 @@
-import { Spieler } from "../../domain/shared";
+import { Spieler } from "../../domain/spielerverwaltung";
 import { erstelleSpiel } from "../../domain/spieleverwaltung";
 import { Uno } from "../../domain/uno";
 import { useSpieleverwaltungStorage } from "../../services/adapters";

@@ -1,5 +1,8 @@
-import { Punkte, Rundennummer, Spieler, Spielstand } from "./shared";
+import { Punkte } from "./punkte";
+import { Rundennummer } from "./rundennummer";
 import { Siegerehrung } from "./siegerehrung";
+import { Spieler } from "./spielerliste";
+import { Spielstand } from "./spielstand";
 
 const RUNDEN_START = 1;
 
@@ -9,6 +12,7 @@ const MAX_ANZAHL_SPIELER = 10;
 export type Uno = {
   id: UniqueId;
   titel: string;
+  created: Timestamp;
   rundennummer: Rundennummer;
   runden: Runden;
   spieler: Spieler[];
@@ -41,16 +45,23 @@ export function erstelleSpiel(spieler: Spieler[]): Result<Uno> {
     };
   }
 
-  const now = new Date();
-  const formattedDate = now.toLocaleDateString(undefined, {
-    dateStyle: "short",
-  });
   const runden = {
     [RUNDEN_START]: erstelleRunde(spieler),
   };
+
   const spiel = {
-    id: now.getTime().toString(),
-    titel: `UNO, ${formattedDate}`,
+    created: Date.now(),
+    get id() {
+      return this.created.toString();
+    },
+    get titel() {
+      return `UNO, ${new Date(this.created).toLocaleDateString(undefined, {
+        weekday: "short",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })}`;
+    },
     rundennummer: RUNDEN_START,
     runden,
     spieler,

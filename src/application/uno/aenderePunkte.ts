@@ -1,4 +1,5 @@
-import { Punkte, Spieler } from "../../domain/shared";
+import { Punkte } from "../../domain/punkte";
+import { Spieler } from "../../domain/spielerliste";
 import { aenderePunkte } from "../../domain/spieleverwaltung";
 import { Uno } from "../../domain/uno";
 import { useSpieleverwaltungStorage } from "../../services/adapters";
