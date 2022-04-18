@@ -237,8 +237,12 @@ export default function Uno() {
             Wollt ihr das Spiel beenden und die Siegerehrung durchführen?
           </DialogContentText>
           <DialogActions>
-            <Button onClick={handleDialogClose}>Nein</Button>
-            <Button onClick={handleBeendeSpielJaClick}>Ja</Button>
+            <Button size="small" onClick={handleDialogClose}>
+              Nein
+            </Button>
+            <Button size="small" onClick={handleBeendeSpielJaClick}>
+              Ja
+            </Button>
           </DialogActions>
         </DialogContent>
       </Dialog>

@@ -13,7 +13,11 @@ type SpielProps = {
 function Fortsetzen({ spiel }: SpielProps) {
   return (
     <Card sx={{ backgroundColor: "primary.dark" }}>
-      <CardActionArea component={RouterLink} to={`/uno/${spiel.id}`}>
+      <CardActionArea
+        component={RouterLink}
+        to={`/uno/${spiel.id}`}
+        aria-label={`Das Spiel ${spiel.titel} fortsetzen`}
+      >
         <CardContent>
           <Typography sx={{ fontsize: 14 }} color="text.secondary">
             Fortsetzen
@@ -39,6 +43,7 @@ function ZurSiegerehrung({ spiel }: SpielProps) {
       <CardActionArea
         component={RouterLink}
         to={`siegerehrungen/${spiel.siegerehrungId}`}
+        aria-label={`Die Siegerehrung für das Spiel ${spiel.titel} anschauen`}
       >
         <CardContent>
           <Typography sx={{ fontsize: 14 }} color="text.secondary">

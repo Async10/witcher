@@ -17,3 +17,7 @@ export function spielerHinzufuegen(liste: Spielerliste, spieler: Spieler): Resul
     value: [...liste, spieler],
   }
 }
+
+export function spielerLoeschen(liste: Spielerliste, spieler: Spieler) {
+  return liste.filter(s => s !== spieler);
+}

@@ -28,8 +28,13 @@ export default function Home() {
       </Container>
 
       <Paper
-        component="footer"
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+        elevation={3}
       >
         <BottomNavigation value={location.pathname} showLabels>
           <BottomNavigationAction
@@ -43,7 +48,7 @@ export default function Home() {
             component={RouterLink}
             to="/spieler"
             value="/spieler"
-            label="Spielerverwaltung"
+            label="Spieler"
             icon={<PeopleOutlined />}
           />
           <BottomNavigationAction

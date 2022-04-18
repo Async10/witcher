@@ -1,6 +1,6 @@
 import { Punkte } from "./punkte";
 import { Siegerehrung } from "./siegerehrung";
-import { Spieler } from "./spielerverwaltung";
+import { Spieler } from "./spielerliste";
 import * as uno from "./uno";
 
 export type Spieleverwaltung = {
