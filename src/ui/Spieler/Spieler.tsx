@@ -93,7 +93,7 @@ export default function Spieler() {
                     aria-label="Spieler löschen"
                     onClick={handleSpielerLoeschenClick(spieler)}
                   >
-                    <DeleteOutlined />
+                    <DeleteOutlined color="error" />
                   </IconButton>
                 }
               >

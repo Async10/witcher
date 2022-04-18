@@ -43,7 +43,7 @@ export default function Spiele() {
       <Fab
         onClick={handleErstelleSpielClick}
         aria-label="Neues Spiel beginnen"
-        sx={{ position: "absolute", bottom: 0, right: 0, mb: 11, mr: 4 }}
+        sx={{ position: "fixed", bottom: 0, right: 0, mb: 10, mr: 2 }}
       >
         <AddOutlined />
       </Fab>

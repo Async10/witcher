@@ -15,15 +15,7 @@ export default function App() {
           <Route path="/spieler" element={<Spieler />} />
           <Route
             path="/bestenliste"
-            element={
-              <div>
-                🚧🚧🚧
-                <br />
-                Sorry, die Bestenliste ist noch nicht implementiert.
-                <br />
-                🚧🚧🚧
-              </div>
-            }
+            element={<div>🚧 Under Construction 🚧</div>}
           />
         </Route>
       </Routes>

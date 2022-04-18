@@ -1,4 +1,5 @@
 import ArrowBackIosOutlined from "@mui/icons-material/ArrowBackIosOutlined";
+import ArrowBackOutlined from "@mui/icons-material/ArrowBackOutlined";
 import ArrowForwardIosOutlined from "@mui/icons-material/ArrowForwardIosOutlined";
 import EmojiEventsOutlined from "@mui/icons-material/EmojiEventsOutlined";
 import AppBar from "@mui/material/AppBar";
@@ -13,11 +14,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import {
   useAenderePunkte,
   useBeendeSpiel,
@@ -125,7 +127,7 @@ export default function Uno() {
         display="flex"
         justifyContent="space-between"
         alignItems="baseline"
-        sx={{ gap: 2, mb: 2 }}
+        sx={{ gap: 2, mb: 1 }}
       >
         <Typography variant="h6" component="h3">
           {auswertung.spieler}
@@ -137,66 +139,72 @@ export default function Uno() {
 
   return (
     <>
-      <Container sx={{ mb: 10 }} maxWidth="sm">
-        <Box sx={{ my: 2 }}>
-          <Typography color="primary" variant="h5" component="h1" gutterBottom>
+      <AppBar color="transparent" position="sticky" sx={{ top: 0, left: 0 }}>
+        <Toolbar sx={{ flexWrap: "wrap", py: 1 }}>
+          <IconButton
+            edge="start"
+            aria-label="Zurück zur Spieleübersicht"
+            component={RouterLink}
+            to="/"
+          >
+            <ArrowBackOutlined />
+          </IconButton>
+          <Typography variant="h6" component="h1">
             {titel}
           </Typography>
-
-          <Typography variant="h6" component="h2" gutterBottom>
-            Runde {rundennummer}
-          </Typography>
-
-          {spieler.map((s) => (
-            <Paper component="article" key={s} sx={{ my: 2, p: 2 }}>
-              {renderAuswertung(s)}
-              <TextField
-                type="number"
-                name={s}
-                label="Punkte"
-                value={aktuelleRunde[s]}
-                onChange={handlePunkteChange(s)}
-                onBlur={handlePunkteBlur}
-                onFocus={handlePunkteFocus}
-                fullWidth
-                margin="none"
-                variant="filled"
-                inputProps={{
-                  min: 0,
-                  step: 10,
-                }}
-              />
-            </Paper>
-          ))}
-        </Box>
+        </Toolbar>
+      </AppBar>
+      <Container sx={{ mt: 2 }} maxWidth="sm">
+        <Typography color="primary.light" variant="h6" component="h2">
+          Runde {rundennummer}
+        </Typography>
+        {spieler.map((s) => (
+          <Paper component="article" key={s} sx={{ my: 2, p: 2 }}>
+            {renderAuswertung(s)}
+            <TextField
+              type="number"
+              name={s}
+              label="Punkte"
+              value={aktuelleRunde[s]}
+              onChange={handlePunkteChange(s)}
+              onBlur={handlePunkteBlur}
+              onFocus={handlePunkteFocus}
+              fullWidth
+              margin="none"
+              variant="filled"
+              inputProps={{
+                min: 0,
+                step: 10,
+              }}
+            />
+          </Paper>
+        ))}
       </Container>
       <AppBar
         position="fixed"
         sx={{
           top: "auto",
+          left: 0,
           bottom: 0,
         }}
+        elevation={3}
+        component="footer"
       >
-        <Toolbar>
-          <Box
-            sx={{
-              display: "inline-flex",
-              flexDirection: "column",
-              visibility: uno.hatVorherigeRunde(spiel) ? "visible" : "hidden",
-            }}
-          >
+        <Toolbar sx={{ py: 0.5 }}>
+          <Stack alignItems="center">
             <IconButton onClick={handleZurueckClick} aria-labelledby="zurueck">
               <ArrowBackIosOutlined />
             </IconButton>
             <Typography id="zurueck" variant="caption">
               Vorherige Runde
             </Typography>
-          </Box>
+          </Stack>
           <Fab
             color="primary"
             sx={{
               mx: "auto",
               transform: "translateY(-50%)",
+              mt: -1,
             }}
             aria-labelledby="siegerehrung"
             onClick={handleBeendeSpielClick}
@@ -209,25 +217,23 @@ export default function Uno() {
               position: "absolute",
               bottom: 0,
               left: "50%",
+              top: "auto",
               transform: "translateX(-50%)",
+              pb: 0.5,
             }}
+            component="div"
             variant="caption"
           >
             Spiel beenden
           </Typography>
-          <Box
-            sx={{
-              display: "inline-flex",
-              flexDirection: "column",
-            }}
-          >
+          <Stack alignItems="center">
             <IconButton onClick={handleWeiterClick} aria-labelledby="weiter">
               <ArrowForwardIosOutlined />
             </IconButton>
             <Typography id="weiter" variant="caption">
               Nächste Runde
             </Typography>
-          </Box>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Dialog open={dialogOpen}>

@@ -23,7 +23,7 @@ export default function Home() {
         </Toolbar>
       </AppBar>
 
-      <Container component="main" sx={{ pt: 9 }} maxWidth="sm">
+      <Container component="main" sx={{ py: 9 }} maxWidth="sm">
         <Outlet />
       </Container>
 
