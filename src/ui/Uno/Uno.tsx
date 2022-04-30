@@ -29,7 +29,7 @@ import {
 import { useAktualisiereSpielstand } from "../../application/uno/aktualisiereSpielstand";
 import { Rundennummer } from "../../domain/rundennummer";
 import { Spieler } from "../../domain/spielerliste";
-import { Auswertung } from "../../domain/spielstand";
+import { Platzierung } from "../../domain/spielstand";
 import * as uno from "../../domain/uno";
 
 function selectAktuelleRunde(
@@ -39,7 +39,7 @@ function selectAktuelleRunde(
   return spiel.runden[rundennummer];
 }
 
-function selectAuswertung(spiel: uno.Uno, spieler: Spieler): Auswertung {
+function selectAuswertung(spiel: uno.Uno, spieler: Spieler): Platzierung {
   return spiel.spielstand.find((s) => s.spieler === spieler)!;
 }
 
@@ -135,7 +135,7 @@ export default function Uno({ spiel }: UnoProps) {
         <Toolbar sx={{ flexWrap: "wrap", py: 1 }}>
           <IconButton
             edge="start"
-            aria-label="Zurück zur Spieleübersicht"
+            title="Zurück zur Spieleübersicht"
             component={RouterLink}
             to="/"
           >

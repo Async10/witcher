@@ -3,7 +3,8 @@ import { Uno } from "./uno";
 
 
 export type Siegerehrung = {
-  id: UniqueId,
+  id: UniqueId;
+  titel: string;
   endstand: Spielstand;
 };
 
@@ -13,6 +14,7 @@ export function erstelleSiegerehrung(siegerehrungen: Siegerehrungen, id: UniqueI
   return {
     ...siegerehrungen,
     [id]: {
+      titel: `Siegerehrung: ${spiel.titel}`,
       id,
       endstand: spiel.spielstand,
     }
