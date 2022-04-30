@@ -1,6 +1,5 @@
 import { Punkte } from "./punkte";
 import { Rundennummer } from "./rundennummer";
-import { Siegerehrung } from "./siegerehrung";
 import { Spieler } from "./spielerliste";
 import { Spielstand } from "./spielstand";
 
@@ -151,9 +150,9 @@ function berechneSpielstand(runden: Runden): Spielstand {
     .map((s, i) => ({ ...s, platz: i + 1 }));
 }
 
-export function beendeSpiel(spiel: Uno, siegerehrung: Siegerehrung): Uno {
+export function beendeSpiel(spiel: Uno, siegerehrungId: UniqueId): Uno {
   return {
     ...spiel,
-    siegerehrungId: siegerehrung.id,
+    siegerehrungId,
   };
 }

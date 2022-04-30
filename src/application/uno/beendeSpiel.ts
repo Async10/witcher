@@ -1,4 +1,4 @@
-import { erstelleSiegerehrung, Siegerehrung } from "../../domain/siegerehrung";
+import { erstelleSiegerehrung } from "../../domain/siegerehrungen";
 import { beendeSpiel } from "../../domain/spieleverwaltung";
 import { Uno } from "../../domain/uno";
 import { useSiegerehrungenStorage, useSpieleverwaltungStorage } from "../../services/adapters";
@@ -9,16 +9,19 @@ export function useBeendeSpiel() {
   const spieleverwaltungStorage: SpieleverwaltungStorageService = useSpieleverwaltungStorage();
 
 
-  function _beendeSpiel(spiel: Uno): Siegerehrung {
-    const siegerehrung = erstelleSiegerehrung(spiel);
+  function _beendeSpiel(spiel: Uno): { siegerehrungId: UniqueId } {
+    const siegerehrungId: UniqueId = Date.now().toString();
     const { siegerehrungen } = siegerehrungenStorage;
-    siegerehrungenStorage.aktualisiereSiegerehrungen([...siegerehrungen, siegerehrung]);
+    const aktualisierteSiegerehrungen = erstelleSiegerehrung(siegerehrungen, siegerehrungId, spiel);
+    siegerehrungenStorage.aktualisiereSiegerehrungen(aktualisierteSiegerehrungen);
 
     const { spieleverwaltung } = spieleverwaltungStorage;
-    const aktualisiert = beendeSpiel(spieleverwaltung, spiel, siegerehrung);
-    spieleverwaltungStorage.aktualisiereSpieleverwaltung(aktualisiert);
+    const aktualisiertesSpiel = beendeSpiel(spieleverwaltung, spiel, siegerehrungId);
+    spieleverwaltungStorage.aktualisiereSpieleverwaltung(aktualisiertesSpiel);
 
-    return siegerehrung;
+    return {
+      siegerehrungId,
+    };
   }
 
   return { beendeSpiel: _beendeSpiel };

@@ -1,11 +1,12 @@
 import AddOutlined from "@mui/icons-material/AddOutlined";
 import Fab from "@mui/material/Fab";
 import Stack from "@mui/material/Stack";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useErstelleSpiel } from "../../application/uno";
 import { Spieleverwaltung } from "../../domain/spieleverwaltung";
 import { Uno } from "../../domain/uno";
 import { useSpieleverwaltungStorage } from "../../services/adapters";
+import ErstelleSpielDialog, { ErstelltesSpiel } from "./ErstelleSpielDialog";
 import Spiel from "./Spiel";
 
 function selectSpiele(spieleverwaltung: Spieleverwaltung): Uno[] {
@@ -16,20 +17,21 @@ function selectSpiele(spieleverwaltung: Spieleverwaltung): Uno[] {
 
 export default function Spiele() {
   const navigate = useNavigate();
-
   const { spieleverwaltung } = useSpieleverwaltungStorage();
   const spiele = selectSpiele(spieleverwaltung);
-
-  const { erstelleSpiel } = useErstelleSpiel();
+  const [erstelleSpielDialogOpen, setErstelleSpielDialogOpen] =
+    React.useState<boolean>(false);
 
   const handleErstelleSpielClick = () => {
-    const result = erstelleSpiel(["Daniel", "Alisi", "Philipp"]);
-    if (!result.success) {
-      alert(result.error);
-      return;
-    }
+    setErstelleSpielDialogOpen(true);
+  };
 
-    navigate(`/uno/${result.value.id}`);
+  const handleSpielStarten = ({ id }: ErstelltesSpiel) => {
+    navigate(`/uno/${id}`);
+  };
+
+  const handleAbbrechen = () => {
+    setErstelleSpielDialogOpen(false);
   };
 
   return (
@@ -47,6 +49,12 @@ export default function Spiele() {
       >
         <AddOutlined />
       </Fab>
+
+      <ErstelleSpielDialog
+        open={erstelleSpielDialogOpen}
+        onAbbrechen={handleAbbrechen}
+        onSpielStarten={handleSpielStarten}
+      />
     </>
   );
 }

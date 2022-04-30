@@ -1,15 +1,15 @@
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./ui/Home";
+import Siegerehrung from "./ui/Siegerehrung";
 import Spiele from "./ui/Spiele";
 import Spieler from "./ui/Spieler";
-import Uno from "./ui/Uno";
+import UnoContainer from "./ui/UnoContainer";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/uno/:id" element={<Uno />} />
+        <Route path="/uno/:id" element={<UnoContainer />} />
         <Route path="/" element={<Home />}>
           <Route index element={<Spiele />} />
           <Route path="/spieler" element={<Spieler />} />
@@ -18,6 +18,7 @@ export default function App() {
             element={<div>🚧 Under Construction 🚧</div>}
           />
         </Route>
+        <Route path="/siegerehrungen/:id" element={<Siegerehrung />} />
       </Routes>
     </BrowserRouter>
   );

@@ -19,7 +19,7 @@ import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   useAenderePunkte,
   useBeendeSpiel,
@@ -29,17 +29,8 @@ import {
 import { useAktualisiereSpielstand } from "../../application/uno/aktualisiereSpielstand";
 import { Rundennummer } from "../../domain/rundennummer";
 import { Spieler } from "../../domain/spielerliste";
-import { Spieleverwaltung } from "../../domain/spieleverwaltung";
 import { Auswertung } from "../../domain/spielstand";
 import * as uno from "../../domain/uno";
-import { useSpieleverwaltungStorage } from "../../services/adapters";
-
-function selectSpiel(
-  spieleverwaltung: Spieleverwaltung,
-  id: UniqueId
-): uno.Uno {
-  return spieleverwaltung.uno[id];
-}
 
 function selectAktuelleRunde(
   spiel: uno.Uno,
@@ -52,16 +43,17 @@ function selectAuswertung(spiel: uno.Uno, spieler: Spieler): Auswertung {
   return spiel.spielstand.find((s) => s.spieler === spieler)!;
 }
 
-export default function Uno() {
-  const params = useParams<{ id: string }>();
-  const navigate = useNavigate();
+export type UnoProps = {
+  spiel: uno.Uno;
+};
+
+export default function Uno({ spiel }: UnoProps) {
+  const { rundennummer, titel, spieler } = spiel;
+  const aktuelleRunde = selectAktuelleRunde(spiel, rundennummer);
 
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
 
-  const { spieleverwaltung } = useSpieleverwaltungStorage();
-  const spiel = selectSpiel(spieleverwaltung, params.id!);
-  const { rundennummer, titel, spieler } = spiel;
-  const aktuelleRunde = selectAktuelleRunde(spiel, rundennummer);
+  const navigate = useNavigate();
 
   const { aenderePunkte } = useAenderePunkte();
   const { beendeSpiel } = useBeendeSpiel();
@@ -86,8 +78,8 @@ export default function Uno() {
   };
 
   const handleBeendeSpielJaClick = () => {
-    const siegerehrung = beendeSpiel(spiel);
-    navigate(`/siegerehrungen/${siegerehrung.id}`, { replace: true });
+    const { siegerehrungId } = beendeSpiel(spiel);
+    navigate(`/siegerehrungen/${siegerehrungId}`, { replace: true });
   };
 
   const handleDialogClose = () => {
@@ -120,7 +112,7 @@ export default function Uno() {
     ev.target.select();
   };
 
-  const renderAuswertung = (spieler: Spieler) => {
+  function renderAuswertung(spieler: Spieler) {
     const auswertung = selectAuswertung(spiel, spieler);
     return (
       <Box
@@ -135,7 +127,7 @@ export default function Uno() {
         <Typography variant="body1">{`Platz ${auswertung.platz} mit ${auswertung.punkte} Punkten`}</Typography>
       </Box>
     );
-  };
+  }
 
   return (
     <>

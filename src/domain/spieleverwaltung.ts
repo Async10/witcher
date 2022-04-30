@@ -1,5 +1,4 @@
 import { Punkte } from "./punkte";
-import { Siegerehrung } from "./siegerehrung";
 import { Spieler } from "./spielerliste";
 import * as uno from "./uno";
 
@@ -46,8 +45,8 @@ export function geheZuVorherigerRunde(verwaltung: Spieleverwaltung, spiel: uno.U
   return aktualisiereSpiel(verwaltung, aktualisiert);
 }
 
-export function beendeSpiel(verwaltung: Spieleverwaltung, spiel: uno.Uno, siegerehrung: Siegerehrung) {
-  const aktualisiert = uno.beendeSpiel(spiel, siegerehrung);
+export function beendeSpiel(verwaltung: Spieleverwaltung, spiel: uno.Uno, siegerehrungId: UniqueId) {
+  const aktualisiert = uno.beendeSpiel(spiel, siegerehrungId);
   return aktualisiereSpiel(verwaltung, aktualisiert);
 }
 
