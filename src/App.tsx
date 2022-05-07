@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Home from "./ui/Home";
 import Siegerehrung from "./ui/Siegerehrung";
 import Spiele from "./ui/Spiele";
@@ -7,7 +7,7 @@ import UnoContainer from "./ui/UnoContainer";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/uno/:id" element={<UnoContainer />} />
         <Route path="/" element={<Home />}>
@@ -20,6 +20,6 @@ export default function App() {
         </Route>
         <Route path="/siegerehrungen/:id" element={<Siegerehrung />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
