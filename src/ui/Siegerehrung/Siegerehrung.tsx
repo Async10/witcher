@@ -24,6 +24,11 @@ export default function Siegerehrung() {
   const { siegerehrungen } = useSiegerehrungenStorage();
   const siegerehrung = selectSiegerehrung(siegerehrungen, params.id!);
 
+  // Die Animation friert ein, wenn nicht bei jedem Rendern eine
+  // neue Instanz der Animationsdaten verwendet wird.
+  // Siehe: https://github.com/airbnb/lottie-web/issues/2070
+  const animationData = JSON.parse(JSON.stringify(fireworks));
+
   if (!siegerehrung) {
     return <Navigate replace to="/" />;
   }
@@ -75,7 +80,7 @@ export default function Siegerehrung() {
               transform: "translateY(-50%)",
             }}
           >
-            <Lottie loop animationData={fireworks} />
+            <Lottie loop animationData={animationData} />
           </Box>
         </Box>
       </Container>
