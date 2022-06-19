@@ -7,19 +7,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Lottie from "lottie-react";
 import { Link as RouterLink, Navigate, useParams } from "react-router-dom";
-import * as siegerehrungen from "../../domain/siegerehrungen";
+import { Siegerehrungen } from "../../domain/siegerehrungen";
 import { useSiegerehrungenStorage } from "../../services/adapters";
 import fireworks from "./fireworks.json";
 import Platzierungen from "./Platzierungen";
 
-function selectSiegerehrung(
-  siegerehrungen: siegerehrungen.Siegerehrungen,
-  id: UniqueId
-): siegerehrungen.Siegerehrung | undefined {
+function selectSiegerehrung(siegerehrungen: Siegerehrungen, id: UniqueId) {
   return siegerehrungen[id];
 }
 
-export default function Siegerehrung() {
+export default function SiegerehrungPage() {
   const params = useParams<{ id: UniqueId }>();
   const { siegerehrungen } = useSiegerehrungenStorage();
   const siegerehrung = selectSiegerehrung(siegerehrungen, params.id!);

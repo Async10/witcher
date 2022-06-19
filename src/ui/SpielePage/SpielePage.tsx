@@ -5,22 +5,61 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Siegerehrung, Siegerehrungen } from "../../domain/siegerehrungen";
 import { Spieleverwaltung } from "../../domain/spieleverwaltung";
 import { Uno } from "../../domain/uno";
-import { useSpieleverwaltungStorage } from "../../services/adapters";
+import {
+  useSiegerehrungenStorage,
+  useSpieleverwaltungStorage,
+} from "../../services/adapters";
 import ErstelleSpielDialog, { ErstelltesSpiel } from "./ErstelleSpielDialog";
-import Spiel from "./Spiel";
+import SpielCard, { SpielCardProps } from "./SpielCard";
 
-function selectSpiele(spieleverwaltung: Spieleverwaltung): Uno[] {
-  return Object.values(spieleverwaltung.uno).sort(
-    (spielA, spielB) => spielB.created - spielA.created
-  );
+function selectSpiele(
+  spieleverwaltung: Spieleverwaltung,
+  siegerehrungen: Siegerehrungen
+): SpielCardProps[] {
+  return orderByCreatedDesc([
+    ...Object.values(spieleverwaltung.uno),
+    ...Object.values(siegerehrungen),
+  ]).map(toSpielCardProps);
 }
 
-export default function Spiele() {
+function toSpielCardProps(spiel: Uno | Siegerehrung): SpielCardProps {
+  return isSiegerehrung(spiel)
+    ? { type: "siegerehrung", siegerehrung: spiel }
+    : { type: "spiel", spiel };
+}
+
+function orderByCreatedDesc(spiele: Array<Uno | Siegerehrung>) {
+  return [...spiele].sort((a, b) => {
+    const createdA = getCreated(a);
+    const createdB = getCreated(b);
+    return createdB - createdA;
+  });
+}
+
+function getCreated(spiel: Uno | Siegerehrung) {
+  if (isSiegerehrung(spiel)) {
+    return spiel.spielCreated ?? 0;
+  }
+
+  return spiel.created;
+}
+
+function isSiegerehrung(spiel: Uno | Siegerehrung): spiel is Siegerehrung {
+  return "endstand" in spiel;
+}
+
+function getId(spiel: SpielCardProps) {
+  return spiel.type === "spiel" ? spiel.spiel.id : spiel.siegerehrung.id;
+}
+
+export default function SpielePage() {
   const navigate = useNavigate();
   const { spieleverwaltung } = useSpieleverwaltungStorage();
-  const spiele = selectSpiele(spieleverwaltung);
+  const { siegerehrungen } = useSiegerehrungenStorage();
+  const spiele = selectSpiele(spieleverwaltung, siegerehrungen);
   const [erstelleSpielDialogOpen, setErstelleSpielDialogOpen] =
     React.useState<boolean>(false);
 
@@ -64,7 +103,7 @@ export default function Spiele() {
     <>
       <Stack spacing={2}>
         {spiele.map((spiel) => (
-          <Spiel key={spiel.id} spiel={spiel} />
+          <SpielCard key={getId(spiel)} {...spiel} />
         ))}
       </Stack>
 

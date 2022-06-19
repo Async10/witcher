@@ -14,11 +14,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import React from "react";
-import { useSpielerHinzufuegen } from "../../application/spieler/spielerHinzufuegen";
-import { useSpielerLoeschen } from "../../application/spieler/spielerLoeschen";
+import {
+  useSpielerHinzufuegen,
+  useSpielerLoeschen,
+} from "../../application/spieler";
 import { useSpielerlisteStorage } from "../../services/adapters";
 
-export default function Spieler() {
+export default function SpielerPage() {
   const { spielerliste } = useSpielerlisteStorage();
 
   const { spielerHinzufuegen } = useSpielerHinzufuegen();

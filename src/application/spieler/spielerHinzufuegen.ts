@@ -4,9 +4,10 @@ import { SpielerlisteStorageService } from "../ports";
 
 export function useSpielerHinzufuegen() {
   const storage: SpielerlisteStorageService = useSpielerlisteStorage();
+
   function _spielerHinzufuegen(spieler: Spieler) {
     const { spielerliste } = storage;
-    const result = spielerHinzufuegen(spielerliste, spieler)
+    const result = spielerHinzufuegen(spielerliste, spieler);
     if (result.success) {
       storage.aktualisiereSpielerliste(result.value);
     }
@@ -14,5 +15,5 @@ export function useSpielerHinzufuegen() {
     return result;
   }
 
-  return { spielerHinzufuegen: _spielerHinzufuegen }
+  return { spielerHinzufuegen: _spielerHinzufuegen };
 }

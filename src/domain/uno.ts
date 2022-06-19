@@ -58,13 +58,13 @@ export function erstelleSpiel(spieler: Spieler[]): Result<Uno> {
         weekday: "short",
         year: "numeric",
         month: "long",
-        day: "numeric"
+        day: "numeric",
       })}`;
     },
     rundennummer: RUNDEN_START,
     runden,
     spieler,
-    spielstand: berechneSpielstand(runden)
+    spielstand: berechneSpielstand(runden),
   };
   return { success: true, value: spiel };
 }
@@ -77,28 +77,33 @@ function validateErstelleSpiel(spieler: Spieler[]): string[] {
   const messages = [];
 
   if (spieler.length < MIN_ANZAHL_SPIELER)
-    messages.push(`Die Mindestanzahl der Spieler beträgt ${MIN_ANZAHL_SPIELER}.`);
+    messages.push(
+      `Die Mindestanzahl der Spieler beträgt ${MIN_ANZAHL_SPIELER}.`
+    );
 
   if (spieler.length > MAX_ANZAHL_SPIELER)
-    messages.push(`Die Maximalanzahl der Spieler beträgt ${MAX_ANZAHL_SPIELER}.`);
+    messages.push(
+      `Die Maximalanzahl der Spieler beträgt ${MAX_ANZAHL_SPIELER}.`
+    );
 
   return messages;
 }
 
 function spieler(spiel: Uno) {
-  return spiel.spielstand.map(s => s.spieler);
+  return spiel.spielstand.map((s) => s.spieler);
 }
 
 export function geheZuNaechsterRunde(spiel: Uno): Uno {
   const rundennummer = spiel.rundennummer + 1;
-  const naechsteRunde = spiel.runden[rundennummer] ?? erstelleRunde(spieler(spiel));
+  const naechsteRunde =
+    spiel.runden[rundennummer] ?? erstelleRunde(spieler(spiel));
   return {
     ...spiel,
     rundennummer,
     runden: {
       ...spiel.runden,
       [rundennummer]: naechsteRunde,
-    }
+    },
   };
 }
 
@@ -114,7 +119,11 @@ export function geheZuVorherigerRunde(spiel: Uno): Uno {
   };
 }
 
-export function aenderePunkte(spiel: Uno, spieler: Spieler, punkte: Punkte): Uno {
+export function aenderePunkte(
+  spiel: Uno,
+  spieler: Spieler,
+  punkte: Punkte
+): Uno {
   return {
     ...spiel,
     runden: {
@@ -122,15 +131,15 @@ export function aenderePunkte(spiel: Uno, spieler: Spieler, punkte: Punkte): Uno
       [spiel.rundennummer]: {
         ...spiel.runden[spiel.rundennummer],
         [spieler]: Math.max(punkte, 0),
-      }
-    }
+      },
+    },
   };
 }
 
 export function aktualisiereSpielstand(spiel: Uno): Uno {
   return {
     ...spiel,
-    spielstand: berechneSpielstand(spiel.runden)
+    spielstand: berechneSpielstand(spiel.runden),
   };
 }
 
@@ -148,11 +157,4 @@ function berechneSpielstand(runden: Runden): Spielstand {
     .map(([spieler, punkte]) => ({ spieler, punkte }))
     .sort((a, b) => a.punkte - b.punkte)
     .map((s, i) => ({ ...s, platz: i + 1 }));
-}
-
-export function beendeSpiel(spiel: Uno, siegerehrungId: UniqueId): Uno {
-  return {
-    ...spiel,
-    siegerehrungId,
-  };
 }

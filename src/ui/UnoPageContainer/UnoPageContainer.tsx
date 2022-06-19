@@ -1,17 +1,13 @@
 import { Navigate, useParams } from "react-router-dom";
 import { Spieleverwaltung } from "../../domain/spieleverwaltung";
-import * as uno from "../../domain/uno";
 import { useSpieleverwaltungStorage } from "../../services/adapters";
-import Uno from "../Uno";
+import UnoPage from "../UnoPage";
 
-function selectSpiel(
-  spieleverwaltung: Spieleverwaltung,
-  id: UniqueId
-): uno.Uno | undefined {
+function selectSpiel(spieleverwaltung: Spieleverwaltung, id: UniqueId) {
   return spieleverwaltung.uno[id];
 }
 
-export default function UnoContainer() {
+export default function UnoPageContainer() {
   const params = useParams<{ id: UniqueId }>();
   const { spieleverwaltung } = useSpieleverwaltungStorage();
   const spiel = selectSpiel(spieleverwaltung, params.id!);
@@ -20,5 +16,5 @@ export default function UnoContainer() {
     return <Navigate replace to="/" />;
   }
 
-  return <Uno spiel={spiel} />;
+  return <UnoPage spiel={spiel} />;
 }

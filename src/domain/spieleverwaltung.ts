@@ -16,7 +16,7 @@ export function erstelleSpiel(
   if (!result.success) return result;
   return {
     success: true,
-    value: [aktualisiereSpiel(verwaltung, result.value), result.value]
+    value: [aktualisiereSpiel(verwaltung, result.value), result.value],
   };
 }
 
@@ -30,32 +30,54 @@ export function aenderePunkte(
   return aktualisiereSpiel(verwaltung, aktualisiert);
 }
 
-export function aktualisiereSpielstand(verwaltung: Spieleverwaltung, spiel: uno.Uno) {
+export function aktualisiereSpielstand(
+  verwaltung: Spieleverwaltung,
+  spiel: uno.Uno
+) {
   const aktualisiert = uno.aktualisiereSpielstand(spiel);
   return aktualisiereSpiel(verwaltung, aktualisiert);
 }
 
-export function geheZuNaechsterRunde(verwaltung: Spieleverwaltung, spiel: uno.Uno) {
+export function geheZuNaechsterRunde(
+  verwaltung: Spieleverwaltung,
+  spiel: uno.Uno
+) {
   const aktualisiert = uno.geheZuNaechsterRunde(spiel);
   return aktualisiereSpiel(verwaltung, aktualisiert);
 }
 
-export function geheZuVorherigerRunde(verwaltung: Spieleverwaltung, spiel: uno.Uno) {
+export function geheZuVorherigerRunde(
+  verwaltung: Spieleverwaltung,
+  spiel: uno.Uno
+) {
   const aktualisiert = uno.geheZuVorherigerRunde(spiel);
   return aktualisiereSpiel(verwaltung, aktualisiert);
 }
 
-export function beendeSpiel(verwaltung: Spieleverwaltung, spiel: uno.Uno, siegerehrungId: UniqueId) {
-  const aktualisiert = uno.beendeSpiel(spiel, siegerehrungId);
-  return aktualisiereSpiel(verwaltung, aktualisiert);
+export function loescheSpiel(verwaltung: Spieleverwaltung, unoId: UniqueId) {
+  const aktualisiert = Object.entries(verwaltung.uno).reduce((acc, curr) => {
+    const [id, uno] = curr;
+    if (id !== unoId) {
+      acc[id] = uno;
+    }
+
+    return acc;
+  }, {} as { [id: UniqueId]: uno.Uno });
+  return {
+    ...verwaltung,
+    uno: aktualisiert,
+  };
 }
 
-function aktualisiereSpiel(verwaltung: Spieleverwaltung, spiel: uno.Uno): Spieleverwaltung {
+function aktualisiereSpiel(
+  verwaltung: Spieleverwaltung,
+  spiel: uno.Uno
+): Spieleverwaltung {
   return {
     ...verwaltung,
     uno: {
       ...verwaltung.uno,
       [spiel.id]: spiel,
-    }
+    },
   };
 }

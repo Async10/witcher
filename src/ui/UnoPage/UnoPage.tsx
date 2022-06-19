@@ -1,6 +1,8 @@
+import { MoreVertOutlined } from "@mui/icons-material";
 import ArrowBackIosOutlined from "@mui/icons-material/ArrowBackIosOutlined";
 import ArrowBackOutlined from "@mui/icons-material/ArrowBackOutlined";
 import ArrowForwardIosOutlined from "@mui/icons-material/ArrowForwardIosOutlined";
+import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
 import EmojiEventsOutlined from "@mui/icons-material/EmojiEventsOutlined";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -13,6 +15,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -25,38 +31,43 @@ import {
   useBeendeSpiel,
   useGeheZuNaechsterRunde,
   useGeheZuVorherigerRunde,
+  useLoescheSpiel,
 } from "../../application/uno";
 import { useAktualisiereSpielstand } from "../../application/uno/aktualisiereSpielstand";
 import { Rundennummer } from "../../domain/rundennummer";
 import { Spieler } from "../../domain/spielerliste";
 import { Platzierung } from "../../domain/spielstand";
-import * as uno from "../../domain/uno";
+import { Runde, Uno } from "../../domain/uno";
 
-function selectAktuelleRunde(
-  spiel: uno.Uno,
-  rundennummer: Rundennummer
-): uno.Runde {
+function selectAktuelleRunde(spiel: Uno, rundennummer: Rundennummer): Runde {
   return spiel.runden[rundennummer];
 }
 
-function selectAuswertung(spiel: uno.Uno, spieler: Spieler): Platzierung {
+function selectAuswertung(spiel: Uno, spieler: Spieler): Platzierung {
   return spiel.spielstand.find((s) => s.spieler === spieler)!;
 }
 
-export type UnoProps = {
-  spiel: uno.Uno;
+export type UnoPageProps = {
+  spiel: Uno;
 };
 
-export default function Uno({ spiel }: UnoProps) {
+export default function UnoPage({ spiel }: UnoPageProps) {
   const { rundennummer, titel, spieler } = spiel;
   const aktuelleRunde = selectAktuelleRunde(spiel, rundennummer);
 
-  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+  const [spielBeendenDialogOpen, setSpielBeendenDialogOpen] =
+    React.useState<boolean>(false);
+  const [spielLoeschenDialogOpen, setSpielLoeschenDialogOpen] =
+    React.useState<boolean>(false);
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState<HTMLElement | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
   const { aenderePunkte } = useAenderePunkte();
   const { beendeSpiel } = useBeendeSpiel();
+  const { loescheSpiel } = useLoescheSpiel();
   const { geheZuNaechsterRunde } = useGeheZuNaechsterRunde();
   const { geheZuVorherigerRunde } = useGeheZuVorherigerRunde();
   const { aktualisiereSpielstand } = useAktualisiereSpielstand();
@@ -64,6 +75,20 @@ export default function Uno({ spiel }: UnoProps) {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [rundennummer]);
+
+  const handleMenuButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setMenuAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleLoeschenClick = () => {
+    setSpielLoeschenDialogOpen(true);
+  };
 
   const handleWeiterClick = () => {
     geheZuNaechsterRunde(spiel);
@@ -74,7 +99,7 @@ export default function Uno({ spiel }: UnoProps) {
   };
 
   const handleBeendeSpielClick = () => {
-    setDialogOpen(true);
+    setSpielBeendenDialogOpen(true);
   };
 
   const handleBeendeSpielJaClick = () => {
@@ -82,8 +107,17 @@ export default function Uno({ spiel }: UnoProps) {
     navigate(`/siegerehrungen/${siegerehrungId}`, { replace: true });
   };
 
-  const handleDialogClose = () => {
-    setDialogOpen(false);
+  const handleSpielBeendenDialogClose = () => {
+    setSpielBeendenDialogOpen(false);
+  };
+
+  const handleLoescheSpielJaClick = () => {
+    loescheSpiel(spiel.id);
+    navigate(`/`, { replace: true });
+  };
+
+  const handleSpielLoeschenDialogClose = () => {
+    setSpielLoeschenDialogOpen(false);
   };
 
   const handlePunkteChange =
@@ -144,8 +178,29 @@ export default function Uno({ spiel }: UnoProps) {
           <Typography variant="h6" component="h1">
             {titel}
           </Typography>
+          <IconButton
+            edge="end"
+            title="Öffne Menü"
+            sx={{ display: "inline-block", marginLeft: "auto" }}
+            onClick={handleMenuButtonClick}
+          >
+            <MoreVertOutlined />
+          </IconButton>
         </Toolbar>
       </AppBar>
+      <Menu
+        open={!!menuAnchorEl}
+        anchorEl={menuAnchorEl}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleLoeschenClick}>
+          <ListItemIcon>
+            <DeleteOutlined color="error" />
+          </ListItemIcon>
+          <ListItemText>Löschen</ListItemText>
+        </MenuItem>
+      </Menu>
+
       <Container sx={{ mt: 2 }} maxWidth="sm">
         <Typography color="primary.light" variant="h6" component="h2">
           Runde {rundennummer}
@@ -228,17 +283,34 @@ export default function Uno({ spiel }: UnoProps) {
           </Stack>
         </Toolbar>
       </AppBar>
-      <Dialog open={dialogOpen}>
+      <Dialog open={spielBeendenDialogOpen}>
         <DialogTitle>Spiel beenden?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Wollt ihr das Spiel beenden und die Siegerehrung durchführen?
           </DialogContentText>
           <DialogActions>
-            <Button size="small" onClick={handleDialogClose}>
+            <Button size="small" onClick={handleSpielBeendenDialogClose}>
               Nein
             </Button>
             <Button size="small" onClick={handleBeendeSpielJaClick}>
+              Ja
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={spielLoeschenDialogOpen}>
+        <DialogTitle>Spiel loeschen?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Soll das Spiel wirklich gelöscht werden?
+          </DialogContentText>
+          <DialogActions>
+            <Button size="small" onClick={handleSpielLoeschenDialogClose}>
+              Nein
+            </Button>
+            <Button size="small" onClick={handleLoescheSpielJaClick}>
               Ja
             </Button>
           </DialogActions>

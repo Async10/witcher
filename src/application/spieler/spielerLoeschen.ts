@@ -10,5 +10,5 @@ export function useSpielerLoeschen() {
     storage.aktualisiereSpielerliste(aktualisiert);
   }
 
-  return { spielerLoeschen: _spielerLoeschen}
+  return { spielerLoeschen: _spielerLoeschen };
 }
