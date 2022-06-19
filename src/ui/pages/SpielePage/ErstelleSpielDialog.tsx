@@ -18,10 +18,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
 import React from "react";
-import { useErstelleSpiel } from "../../application/uno";
-import { Spieler } from "../../domain/spielerliste";
-import { kannSpielErstellen } from "../../domain/uno";
-import { useSpielerlisteStorage } from "../../services/adapters";
+import { useErstelleSpiel } from "../../../application/uno";
+import { Spieler } from "../../../domain/spielerliste";
+import { kannSpielErstellen } from "../../../domain/uno";
+import { useSpielerlisteStorage } from "../../../services/adapters";
 
 export type ErstelltesSpiel = {
   id: UniqueId;

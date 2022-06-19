@@ -1,6 +1,6 @@
 import { Navigate, useParams } from "react-router-dom";
-import { useSiegerehrungenStorage } from "../../services/adapters";
-import SiegerehrungPage from "../SiegerehrungPage";
+import { useSiegerehrungenStorage } from "../../../services/adapters";
+import SiegerehrungPage from "./SiegerehrungPage";
 
 export default function SiegerehrungPageContainer() {
   const params = useParams<{ id: UniqueId }>();

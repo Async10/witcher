@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router-dom";
-import { Spieleverwaltung } from "../../domain/spieleverwaltung";
-import { useSpieleverwaltungStorage } from "../../services/adapters";
-import UnoPage from "../UnoPage";
+import { Spieleverwaltung } from "../../../domain/spieleverwaltung";
+import { useSpieleverwaltungStorage } from "../../../services/adapters";
+import UnoPage from "./UnoPage";
 
 function selectSpiel(spieleverwaltung: Spieleverwaltung, id: UniqueId) {
   return spieleverwaltung.uno[id];

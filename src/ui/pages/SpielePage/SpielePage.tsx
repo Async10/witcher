@@ -5,13 +5,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Siegerehrung, Siegerehrungen } from "../../domain/siegerehrungen";
-import { Spieleverwaltung } from "../../domain/spieleverwaltung";
-import { Uno } from "../../domain/uno";
+import { Siegerehrung, Siegerehrungen } from "../../../domain/siegerehrungen";
+import { Spieleverwaltung } from "../../../domain/spieleverwaltung";
+import { Uno } from "../../../domain/uno";
 import {
   useSiegerehrungenStorage,
   useSpieleverwaltungStorage,
-} from "../../services/adapters";
+} from "../../../services/adapters";
 import ErstelleSpielDialog, { ErstelltesSpiel } from "./ErstelleSpielDialog";
 import SpielCard, { SpielCardProps } from "./SpielCard";
 

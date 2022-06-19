@@ -32,12 +32,12 @@ import {
   useGeheZuNaechsterRunde,
   useGeheZuVorherigerRunde,
   useLoescheSpiel,
-} from "../../application/uno";
-import { useAktualisiereSpielstand } from "../../application/uno/aktualisiereSpielstand";
-import { Rundennummer } from "../../domain/rundennummer";
-import { Spieler } from "../../domain/spielerliste";
-import { Platzierung } from "../../domain/spielstand";
-import { Runde, Uno } from "../../domain/uno";
+} from "../../../application/uno";
+import { useAktualisiereSpielstand } from "../../../application/uno/aktualisiereSpielstand";
+import { Rundennummer } from "../../../domain/rundennummer";
+import { Spieler } from "../../../domain/spielerliste";
+import { Platzierung } from "../../../domain/spielstand";
+import { Runde, Uno } from "../../../domain/uno";
 
 function selectAktuelleRunde(spiel: Uno, rundennummer: Rundennummer): Runde {
   return spiel.runden[rundennummer];

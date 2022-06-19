@@ -1,8 +1,8 @@
 import blue from "@mui/material/colors/blue";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import { Siegerehrung } from "../../domain/siegerehrungen";
-import { Uno } from "../../domain/uno";
+import { Siegerehrung } from "../../../domain/siegerehrungen";
+import { Uno } from "../../../domain/uno";
 import LinkCard from "./LinkCard";
 
 export type SpielCardProps =

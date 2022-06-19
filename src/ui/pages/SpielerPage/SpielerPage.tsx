@@ -17,8 +17,8 @@ import React from "react";
 import {
   useSpielerHinzufuegen,
   useSpielerLoeschen,
-} from "../../application/spieler";
-import { useSpielerlisteStorage } from "../../services/adapters";
+} from "../../../application/spieler";
+import { useSpielerlisteStorage } from "../../../services/adapters";
 
 export default function SpielerPage() {
   const { spielerliste } = useSpielerlisteStorage();

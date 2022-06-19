@@ -2,7 +2,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { Platzierung, Spielstand } from "../../domain/spielstand";
+import { Platzierung, Spielstand } from "../../../domain/spielstand";
 
 export type PlatzierungenProps = {
   endstand: Spielstand;

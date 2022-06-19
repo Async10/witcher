@@ -20,8 +20,8 @@ import Typography from "@mui/material/Typography";
 import Lottie from "lottie-react";
 import React from "react";
 import { Link as RouterLink, Navigate, useNavigate } from "react-router-dom";
-import { useLoescheSiegerehrung } from "../../application/siegerehrungen";
-import { Siegerehrung } from "../../domain/siegerehrungen";
+import { useLoescheSiegerehrung } from "../../../application/siegerehrungen";
+import { Siegerehrung } from "../../../domain/siegerehrungen";
 import fireworks from "./fireworks.json";
 import Platzierungen from "./Platzierungen";
 
