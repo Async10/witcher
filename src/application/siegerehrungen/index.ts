@@ -1,0 +1,1 @@
+export { useLoescheSiegerehrung } from "./loescheSiegerehrung";

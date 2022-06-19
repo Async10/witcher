@@ -301,7 +301,7 @@ export default function UnoPage({ spiel }: UnoPageProps) {
       </Dialog>
 
       <Dialog open={spielLoeschenDialogOpen}>
-        <DialogTitle>Spiel loeschen?</DialogTitle>
+        <DialogTitle>Spiel löschen?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Soll das Spiel wirklich gelöscht werden?
