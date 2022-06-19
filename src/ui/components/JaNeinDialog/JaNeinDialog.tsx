@@ -22,10 +22,10 @@ export default function JaNeinDialog(props: JaNeinDialogProps) {
       <DialogContent>
         <DialogContentText>{props.text}</DialogContentText>
         <DialogActions>
-          <Button size="small" onClick={props.onJa}>
+          <Button size="small" onClick={props.onNein}>
             Nein
           </Button>
-          <Button size="small" onClick={props.onNein}>
+          <Button size="small" onClick={props.onJa}>
             Ja
           </Button>
         </DialogActions>
