@@ -1,11 +1,5 @@
 import AddOutlined from "@mui/icons-material/AddOutlined";
 import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
@@ -19,6 +13,7 @@ import {
   useSpielerLoeschen,
 } from "../../../application/spieler";
 import { useSpielerlisteStorage } from "../../../services/adapters";
+import JaNeinDialog from "../../components/JaNeinDialog";
 
 export default function SpielerPage() {
   const { spielerliste } = useSpielerlisteStorage();
@@ -48,9 +43,9 @@ export default function SpielerPage() {
   const handleSpielerLoeschenClick = (spieler: string) => () =>
     setSpielerZumLoeschen(spieler);
 
-  const handleSpielerLoeschenNeinClick = () => setSpielerZumLoeschen(null);
+  const handleLoescheSpielerNein = () => setSpielerZumLoeschen(null);
 
-  const handleSpielerLoeschenJaClick = () => {
+  const handleLoescheSpielerJa = () => {
     spielerLoeschen(spielerZumLoeschen!);
     setSpielerZumLoeschen(null);
   };
@@ -107,22 +102,13 @@ export default function SpielerPage() {
         </Paper>
       )}
 
-      <Dialog open={dialogOpen}>
-        <DialogTitle>Spieler löschen?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {`Soll der Spieler ${spielerZumLoeschen} wirklich gelöscht werden?`}
-          </DialogContentText>
-          <DialogActions>
-            <Button size="small" onClick={handleSpielerLoeschenNeinClick}>
-              Nein
-            </Button>
-            <Button size="small" onClick={handleSpielerLoeschenJaClick}>
-              Ja
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <JaNeinDialog
+        open={dialogOpen}
+        title="Spieler löschen?"
+        text={`Soll der Spieler ${spielerZumLoeschen} wirklich gelöscht werden?`}
+        onJa={handleLoescheSpielerJa}
+        onNein={handleLoescheSpielerNein}
+      />
     </>
   );
 }

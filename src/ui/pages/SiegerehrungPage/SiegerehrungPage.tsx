@@ -3,13 +3,7 @@ import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
 import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -22,6 +16,7 @@ import React from "react";
 import { Link as RouterLink, Navigate, useNavigate } from "react-router-dom";
 import { useLoescheSiegerehrung } from "../../../application/siegerehrungen";
 import { Siegerehrung } from "../../../domain/siegerehrungen";
+import JaNeinDialog from "../../components/JaNeinDialog";
 import fireworks from "./fireworks.json";
 import Platzierungen from "./Platzierungen";
 
@@ -61,12 +56,12 @@ export default function SiegerehrungPage({
     setSiegerehrungLoeschenDialogOpen(true);
   };
 
-  const handleLoescheSiegerehrungJaClick = () => {
+  const handleLoescheSiegerehrungJa = () => {
     loescheSiegerehrung(siegerehrung.id);
     navigate(`/`, { replace: true });
   };
 
-  const handleSiegerehrungLoeschenDialogClose = () => {
+  const handleLoescheSiegerehrungNein = () => {
     setSiegerehrungLoeschenDialogOpen(false);
   };
 
@@ -147,25 +142,13 @@ export default function SiegerehrungPage({
         </Box>
       </Container>
 
-      <Dialog open={siegerehrungLoeschenDialogOpen}>
-        <DialogTitle>Siegerehrung löschen?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Soll die Siegerehrung wirklich gelöscht werden?
-          </DialogContentText>
-          <DialogActions>
-            <Button
-              size="small"
-              onClick={handleSiegerehrungLoeschenDialogClose}
-            >
-              Nein
-            </Button>
-            <Button size="small" onClick={handleLoescheSiegerehrungJaClick}>
-              Ja
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <JaNeinDialog
+        open={siegerehrungLoeschenDialogOpen}
+        title="Siegerehrung löschen?"
+        text="Soll die Siegerehrung wirklich gelöscht werden?"
+        onJa={handleLoescheSiegerehrungJa}
+        onNein={handleLoescheSiegerehrungNein}
+      />
     </>
   );
 }

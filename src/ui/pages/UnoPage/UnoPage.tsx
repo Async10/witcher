@@ -6,13 +6,7 @@ import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
 import EmojiEventsOutlined from "@mui/icons-material/EmojiEventsOutlined";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -38,6 +32,7 @@ import { Rundennummer } from "../../../domain/rundennummer";
 import { Spieler } from "../../../domain/spielerliste";
 import { Platzierung } from "../../../domain/spielstand";
 import { Runde, Uno } from "../../../domain/uno";
+import JaNeinDialog from "../../components/JaNeinDialog";
 
 function selectAktuelleRunde(spiel: Uno, rundennummer: Rundennummer): Runde {
   return spiel.runden[rundennummer];
@@ -102,21 +97,21 @@ export default function UnoPage({ spiel }: UnoPageProps) {
     setSpielBeendenDialogOpen(true);
   };
 
-  const handleBeendeSpielJaClick = () => {
+  const handleBeendeSpielJa = () => {
     const { siegerehrungId } = beendeSpiel(spiel);
     navigate(`/siegerehrungen/${siegerehrungId}`, { replace: true });
   };
 
-  const handleSpielBeendenDialogClose = () => {
+  const handleBeendeSpielNein = () => {
     setSpielBeendenDialogOpen(false);
   };
 
-  const handleLoescheSpielJaClick = () => {
+  const handleLoescheSpielJa = () => {
     loescheSpiel(spiel.id);
     navigate(`/`, { replace: true });
   };
 
-  const handleSpielLoeschenDialogClose = () => {
+  const handleLoescheSpielNein = () => {
     setSpielLoeschenDialogOpen(false);
   };
 
@@ -283,39 +278,22 @@ export default function UnoPage({ spiel }: UnoPageProps) {
           </Stack>
         </Toolbar>
       </AppBar>
-      <Dialog open={spielBeendenDialogOpen}>
-        <DialogTitle>Spiel beenden?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Wollt ihr das Spiel beenden und die Siegerehrung durchführen?
-          </DialogContentText>
-          <DialogActions>
-            <Button size="small" onClick={handleSpielBeendenDialogClose}>
-              Nein
-            </Button>
-            <Button size="small" onClick={handleBeendeSpielJaClick}>
-              Ja
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
 
-      <Dialog open={spielLoeschenDialogOpen}>
-        <DialogTitle>Spiel löschen?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Soll das Spiel wirklich gelöscht werden?
-          </DialogContentText>
-          <DialogActions>
-            <Button size="small" onClick={handleSpielLoeschenDialogClose}>
-              Nein
-            </Button>
-            <Button size="small" onClick={handleLoescheSpielJaClick}>
-              Ja
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <JaNeinDialog
+        open={spielBeendenDialogOpen}
+        title="Spiel beenden?"
+        text="Wollt ihr das Spiel beenden und die Siegerehrung durchführen?"
+        onJa={handleBeendeSpielJa}
+        onNein={handleBeendeSpielNein}
+      />
+
+      <JaNeinDialog
+        open={spielLoeschenDialogOpen}
+        title="Spiel löschen?"
+        text="Soll das Spiel wirklich gelöscht werden?"
+        onJa={handleLoescheSpielJa}
+        onNein={handleLoescheSpielNein}
+      />
     </>
   );
 }
