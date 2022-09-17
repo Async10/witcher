@@ -25,7 +25,7 @@ import {
   useBeendeSpiel,
   useGeheZuNaechsterRunde,
   useGeheZuVorherigerRunde,
-  useLoescheSpiel,
+  useLoescheSpiel
 } from "../../../application/uno";
 import { useAktualisiereSpielstand } from "../../../application/uno/aktualisiereSpielstand";
 import { Rundennummer } from "../../../domain/rundennummer";
@@ -117,17 +117,17 @@ export default function UnoPage({ spiel }: UnoPageProps) {
 
   const handlePunkteChange =
     (spieler: Spieler) =>
-    (ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      const value = ev.target.value;
-      const punkte = value === "" ? 0 : parseInt(value, 10);
-      if (isNaN(punkte)) {
-        throw new Error(
-          "Punkte müssen eine Ganzzahl größer oder gleich 0 sein"
-        );
-      }
+      (ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const value = ev.target.value;
+        const punkte = value === "" ? 0 : parseInt(value, 10);
+        if (isNaN(punkte)) {
+          throw new Error(
+            "Punkte müssen eine Ganzzahl größer oder gleich 0 sein"
+          );
+        }
 
-      aenderePunkte(spiel, spieler, punkte);
-    };
+        aenderePunkte(spiel, spieler, punkte);
+      };
 
   const handlePunkteBlur = (
     ev: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>
@@ -160,7 +160,7 @@ export default function UnoPage({ spiel }: UnoPageProps) {
 
   return (
     <>
-      <AppBar color="transparent" position="sticky" sx={{ top: 0, left: 0 }}>
+      <AppBar position="sticky" sx={{ top: 0, left: 0 }}>
         <Toolbar sx={{ flexWrap: "wrap", py: 1 }}>
           <IconButton
             edge="start"
@@ -196,7 +196,7 @@ export default function UnoPage({ spiel }: UnoPageProps) {
         </MenuItem>
       </Menu>
 
-      <Container sx={{ mt: 2 }} maxWidth="sm">
+      <Container sx={{ pt: 1, pb: 11 }} maxWidth="sm">
         <Typography color="primary.light" variant="h6" component="h2">
           Runde {rundennummer}
         </Typography>
