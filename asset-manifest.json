@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/witcher/static/js/main.43396c9d.js",
+    "main.js": "/witcher/static/js/main.89cbe6be.js",
     "static/js/787.73b1f765.chunk.js": "/witcher/static/js/787.73b1f765.chunk.js",
     "service-worker.js": "/witcher/service-worker.js",
     "index.html": "/witcher/index.html",
-    "main.43396c9d.js.map": "/witcher/static/js/main.43396c9d.js.map",
+    "main.89cbe6be.js.map": "/witcher/static/js/main.89cbe6be.js.map",
     "787.73b1f765.chunk.js.map": "/witcher/static/js/787.73b1f765.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.43396c9d.js"
+    "static/js/main.89cbe6be.js"
   ]
 }
