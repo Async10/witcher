@@ -27,16 +27,6 @@ export type SiegerehrungPageProps = {
   siegerehrung: Siegerehrung;
 };
 
-const getShareData = async (el: HTMLElement, title: string) => {
-  const canvas = await html2canvas(el);
-  const blob = await (await fetch(canvas.toDataURL("image/png"))).blob();
-  const file = new File([blob], `${title}.png`, { type: blob.type });
-  return {
-    title: title,
-    files: [file],
-  };
-};
-
 export default function SiegerehrungPage({
   siegerehrung,
 }: SiegerehrungPageProps) {
@@ -47,7 +37,6 @@ export default function SiegerehrungPage({
   );
   const theme = useTheme();
   const divRef = React.useRef<HTMLDivElement | null>(null);
-  const shareRef = React.useRef<{ timer: number, data?: globalThis.ShareData; }>({ timer: 0 });
 
   const navigate = useNavigate();
 
@@ -57,20 +46,6 @@ export default function SiegerehrungPage({
   // neue Instanz der Animationsdaten verwendet wird.
   // Siehe: https://github.com/airbnb/lottie-web/issues/2070
   const animationData = JSON.parse(JSON.stringify(fireworks));
-
-  React.useEffect(() => {
-    if (!shareRef.current.data) {
-      shareRef.current.timer = window.setTimeout(async () => {
-        if (divRef.current) {
-          shareRef.current.data = await getShareData(divRef.current, siegerehrung.titel);
-        }
-      }, 1500);
-    }
-
-    return () => {
-      window.clearTimeout(shareRef.current.timer);
-    };
-  }, [siegerehrung.titel]);
 
   const handleMenuButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -87,25 +62,21 @@ export default function SiegerehrungPage({
   };
 
   const handleTeilen = async () => {
-    try {
-      let data: globalThis.ShareData;
-      if (shareRef.current.data) {
-        data = shareRef.current.data;
-      } else {
-        window.clearTimeout(shareRef.current.timer);
-        while (!divRef.current) { }
-        data = await getShareData(divRef.current, siegerehrung.titel);
+    setMenuAnchorEl(null);
+    if (divRef.current && "share" in window.navigator) {
+      try {
+        const canvas = await html2canvas(divRef.current);
+        const blob = await (await fetch(canvas.toDataURL("image/png"))).blob();
+        const file = new File([blob], `${siegerehrung.titel}.png`, { type: blob.type });
+        await window.navigator.share({
+          title: siegerehrung.titel,
+          files: [file],
+          text: "Spiele UNO, Wizard und Witches und teile deine Erfolge mit Freunden!",
+          url: "https://async10.github.io/witcher/",
+        });
+      } catch (err) {
+        console.log(err);
       }
-
-      if (navigator.canShare?.(data)) {
-        await navigator.share(data);
-      } else {
-        alert("Sorry, dein Browser unterstützt das Teilen der Siegerehrung leider nicht :-(");
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setMenuAnchorEl(null);
     }
   };
 
