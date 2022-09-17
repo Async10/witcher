@@ -71,7 +71,7 @@ export default function SiegerehrungPage({
         await window.navigator.share({
           title: siegerehrung.titel,
           files: [file],
-          text: "Spiele UNO, Wizard und Witches mit Freunden und teile deine Erfolge!",
+          text: `${siegerehrung.titel}\n\nSpiele UNO, Wizard und Witches mit Freunden und teile deine Erfolge!\n\n`,
           url: "https://async10.github.io/witcher/",
         });
       } catch (err) {
