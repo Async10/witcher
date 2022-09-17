@@ -138,6 +138,7 @@ export default function UnoPage({ spiel }: UnoPageProps) {
   const handlePunkteFocus = (
     ev: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement, Element>
   ) => {
+    ev.currentTarget.scrollIntoView({ behavior: "smooth", block: "center" });
     ev.target.select();
   };
 
