@@ -1,6 +1,7 @@
 import ArrowBackOutlined from "@mui/icons-material/ArrowBackOutlined";
 import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
 import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
+import ShareOutlined from "@mui/icons-material/ShareOutlined";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -9,8 +10,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import html2canvas from "html2canvas";
 import Lottie from "lottie-react";
 import React from "react";
 import { Link as RouterLink, Navigate, useNavigate } from "react-router-dom";
@@ -19,6 +22,12 @@ import { Siegerehrung } from "../../../domain/siegerehrungen";
 import JaNeinDialog from "../../components/JaNeinDialog";
 import fireworks from "./fireworks.json";
 import Platzierungen from "./Platzierungen";
+
+function DeepChild() {
+  const theme = useTheme();
+  return <span>{`spacing ${theme.spacing}`}</span>;
+}
+
 
 export type SiegerehrungPageProps = {
   siegerehrung: Siegerehrung;
@@ -32,6 +41,8 @@ export default function SiegerehrungPage({
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<HTMLElement | null>(
     null
   );
+  const theme = useTheme();
+  const divRef = React.useRef<HTMLDivElement | null>(null);
 
   const navigate = useNavigate();
 
@@ -56,6 +67,29 @@ export default function SiegerehrungPage({
     setSiegerehrungLoeschenDialogOpen(true);
   };
 
+  const handleTeilen = async () => {
+    try {
+      if (divRef.current) {
+        const canvas = await html2canvas(divRef.current);
+        const blob = await (await fetch(canvas.toDataURL("image/png"))).blob();
+        const file = new File([blob], `${siegerehrung.titel}.png`, { type: blob.type });
+        const data = {
+          title: siegerehrung.titel,
+          files: [file],
+        };
+        if (navigator.canShare?.(data)) {
+          await navigator.share(data);
+        } else {
+          alert("Sorry, dein Browser unterstützt das Teilen der Siegerehrung leider nicht :-(");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setMenuAnchorEl(null);
+    }
+  };
+
   const handleLoescheSiegerehrungJa = () => {
     loescheSiegerehrung(siegerehrung.id);
     navigate(`/`, { replace: true });
@@ -63,6 +97,7 @@ export default function SiegerehrungPage({
 
   const handleLoescheSiegerehrungNein = () => {
     setSiegerehrungLoeschenDialogOpen(false);
+    setMenuAnchorEl(null);
   };
 
   if (!siegerehrung) {
@@ -113,34 +148,44 @@ export default function SiegerehrungPage({
           </ListItemIcon>
           <ListItemText>Löschen</ListItemText>
         </MenuItem>
+        {"share" in window.navigator && (
+          <MenuItem onClick={handleTeilen}>
+            <ListItemIcon>
+              <ShareOutlined />
+            </ListItemIcon>
+            <ListItemText>Teilen</ListItemText>
+          </MenuItem>
+        )}
       </Menu>
 
-      <Container
-        maxWidth="sm"
-        sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
-      >
-        <Box
-          component="main"
-          sx={{
-            position: "relative",
-            flexGrow: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+      <div ref={divRef} style={{ backgroundColor: theme.palette.background.paper }}>
+        <Container
+          maxWidth="sm"
+          sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
         >
-          <Platzierungen endstand={siegerehrung.endstand} />
           <Box
+            component="main"
             sx={{
-              position: "absolute",
-              top: "50%",
-              transform: "translateY(-50%)",
+              position: "relative",
+              flexGrow: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Lottie loop animationData={animationData} />
+            <Platzierungen endstand={siegerehrung.endstand} />
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+            >
+              <Lottie loop animationData={animationData} />
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </div>
 
       <JaNeinDialog
         open={siegerehrungLoeschenDialogOpen}
