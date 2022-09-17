@@ -36,8 +36,8 @@ export default function Platzierungen({ endstand }: PlatzierungenProps) {
 
   return (
     <List component="ol" aria-label="Platzierungen">
-      {endstand.map((auswertung) => (
-        <ListItem>
+      {endstand.map((auswertung, idx) => (
+        <ListItem key={idx}>
           <ListItemText primary={renderPlatzierung(auswertung)} />
         </ListItem>
       ))}
