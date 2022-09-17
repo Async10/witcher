@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/system";
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StoreProvider } from "./services/store";
@@ -14,7 +14,9 @@ const theme = createTheme({
   },
 });
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container!);
+root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -23,7 +25,6 @@ ReactDOM.render(
       </StoreProvider>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
